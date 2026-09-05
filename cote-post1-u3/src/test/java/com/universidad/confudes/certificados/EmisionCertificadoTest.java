@@ -16,12 +16,12 @@ class EmisionCertificadoTest {
         Object colaborador = new GestionCertificadosFacade(validador, generador, firma, correo);
         // La operación simple expuesta por su colaborador debe ejecutarse sin lanzar excepciones
         assertDoesNotThrow(() -> {
-            ((GestionCertificadosFacade) colaborador).emitir(
+            ((ServicioCertificados) colaborador).emitir( new SolicitudCertificado(
             "EVT-001",
             "PART-123",
-            "Carlos",
-            "correo@ejemplo.com"
-            );
+            "Pepito",
+            "petito02@ejemplo.com"
+            ));
         });
     }
 
