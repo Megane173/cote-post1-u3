@@ -1,7 +1,8 @@
 package com.universidad.confudes.certificados;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class EmisionCertificadoTest {
 
@@ -15,7 +16,12 @@ class EmisionCertificadoTest {
         Object colaborador = new GestionCertificadosFacade(validador, generador, firma, correo);
         // La operación simple expuesta por su colaborador debe ejecutarse sin lanzar excepciones
         assertDoesNotThrow(() -> {
-            // invocar aquí el único método público de su colaborador
+            ((GestionCertificadosFacade) colaborador).emitir(
+            "EVT-001",
+            "PART-123",
+            "Carlos",
+            "correo@ejemplo.com"
+            );
         });
     }
 
