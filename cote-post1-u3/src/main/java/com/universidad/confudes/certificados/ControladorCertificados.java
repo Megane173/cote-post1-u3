@@ -14,21 +14,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/certificados")
 public class ControladorCertificados {
 
-    private final GestionCertificadosFacade gestionCertificadosFacade;
+    private final ServicioCertificados servicioCertificados;
 
-    public ControladorCertificados(GestionCertificadosFacade gestionCertificadosFacade) {
-        this.gestionCertificadosFacade=gestionCertificadosFacade;
+    public ControladorCertificados(ServicioCertificados servicioCertificados) {
+        this.servicioCertificados = servicioCertificados;
     }
 
     @PostMapping("/{eventoId}/{participanteId}")
-    public ResponseEntity<String> emitir(@PathVariable String eventoId, @PathVariable String participanteId,
-                                          @RequestParam String nombre, @RequestParam String correoDestino) {
+    public ResponseEntity<byte[]> emitir(@PathVariable String eventoId, @PathVariable String participanteId, 
+        @RequestParam String nombre, @RequestParam String correoDestino) {
 
-        
-        RespuestaPeticionesCertificados r = gestionCertificadosFacade.emitir(eventoId, participanteId, nombre, correoDestino);  
+        SolicitudCertificado solicitud = new SolicitudCertificado( eventoId, participanteId, nombre, correoDestino);
 
-        return r.exito() ? 
-        ResponseEntity.ok(r.descripcion()) 
-        : ResponseEntity.status(403).body(r.descripcion());
+        byte[] certificado = servicioCertificados.emitir(solicitud);
+
+        if (certificado == null) {
+            return ResponseEntity.status(403).build();
+        }
+
+        return ResponseEntity.ok(certificado);
     }
 }
